@@ -1,0 +1,16 @@
+﻿<Window x:Class="PasswordSec.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PasswordSec"
+        mc:Ignorable="d" Height="338" Width="644" Title="欢迎 Lama3L9R">
+    <Grid>
+        <ListBox HorizontalAlignment="Left" Height="288" Margin="10,10,0,0" VerticalAlignment="Top" Width="116"/>
+        <GroupBox Header="详细信息" HorizontalAlignment="Left" Height="247" Margin="140,10,0,0" VerticalAlignment="Top" Width="473">
+            <Grid HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="463" Margin="0,0,-2,-12"/>
+        </GroupBox>
+        <Button Content="测试按钮" HorizontalAlignment="Left" Margin="140,274,0,0" VerticalAlignment="Top" Width="473"/>
+
+    </Grid>
+</Window>
