@@ -15,7 +15,9 @@ namespace PasswordSec {
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
-
+            new Main("").Show();
+            this.Close();
+            //Dev使用，功能写好后请使用网验 谢谢a
         }
 
         public bool checkUpdate()
