@@ -12,23 +12,23 @@
                 <Label Content="用户名" HorizontalAlignment="Left" Margin="148,33,0,0" VerticalAlignment="Top" Width="52"/>
                 <Label Content="   密码" HorizontalAlignment="Left" Margin="148,64,0,0" VerticalAlignment="Top" Width="52"/>
                 <Label Content="   邮箱" HorizontalAlignment="Left" Margin="148,95,0,0" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.538,1.231"/>
-                <ListBox x:Name="sublist" HorizontalAlignment="Left" Height="206" Margin="10,10,0,0" VerticalAlignment="Top" Width="100"/>
+                <ListBox x:Name="sublist" HorizontalAlignment="Left" Height="206" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="sublist_SelectionChanged"/>
                 <Label Content="附加信息  K" HorizontalAlignment="Left" Margin="127,126,0,0" VerticalAlignment="Top" Width="73" RenderTransformOrigin="0.538,1.231"/>
                 <Label Content="附加信息  V" HorizontalAlignment="Left" Margin="127,157,0,0" VerticalAlignment="Top" Width="73" RenderTransformOrigin="0.538,1.231"/>
                 <TextBox x:Name="usr" HorizontalAlignment="Left" Height="23" Margin="221,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
                 <TextBox x:Name="pas" HorizontalAlignment="Left" Height="23" Margin="221,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
                 <TextBox x:Name="eml" HorizontalAlignment="Left" Height="23" Margin="221,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
-                <TextBox x:Name="eik" HorizontalAlignment="Left" Height="23" Margin="221,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223"/>
-                <TextBox x:Name="eiv" HorizontalAlignment="Left" Height="23" Margin="221,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223"/>
-                <Button Content="启用编辑" HorizontalAlignment="Left" Margin="148,194,0,0" VerticalAlignment="Top" Width="75"/>
+                <TextBox x:Name="eik" HorizontalAlignment="Left" Height="23" Margin="221,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
+                <TextBox x:Name="eiv" HorizontalAlignment="Left" Height="23" Margin="221,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
+                <Button Content="启用编辑" HorizontalAlignment="Left" Margin="148,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
                 <Button Content="复制账号" HorizontalAlignment="Left" Margin="245,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
                 <Button Content="复制密码" HorizontalAlignment="Left" Margin="340,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
             </Grid>
         </GroupBox>
         <Button Content="锁定" Margin="170,260,377,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Button Content="保存" Margin="281,260,266,0" VerticalAlignment="Top"/>
-        <Button Content="刷新" Margin="397,260,150,0" VerticalAlignment="Top"/>
-        <Button Content="添加" Margin="506,260,41,0" VerticalAlignment="Top"/>
+        <Button Content="刷新" Margin="397,260,150,0" VerticalAlignment="Top" Click="Button_Click_4"/>
+        <Button Content="添加" Margin="506,260,41,0" VerticalAlignment="Top" Click="Button_Click_5"/>
 
     </Grid>
 </Window>

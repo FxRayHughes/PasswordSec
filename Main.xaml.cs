@@ -43,17 +43,18 @@ namespace PasswordSec {
                     byte[] b = new byte[fileStream.Length];
                     while (fileStream.Read(b, 0, (int)fileStream.Length) != 0) ;
                     string json = AesUtil.AesDecrypt(Encoding.UTF8.GetString(b), ENCRYPT_KEY);
-                    if (!json.Equals("error")) {
-                        this.infolist.Add(this.GetInfo(json));
-                        fileStream.Flush();
-                        fileStream.Dispose();
-                        fileStream.Close();
-                    }
+
+                    this.infolist.Add(this.GetInfo(json , true));
+                    fileStream.Flush();
+                    fileStream.Dispose();
+                    fileStream.Close();
+                    
                 } else if (fileInfo.Extension.Equals(".uap")) {
                     FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     byte[] b = new byte[fileStream.Length];
                     while (fileStream.Read(b, 0, (int) fileStream.Length) != 0) ;
-                    this.infolist.Add(this.GetInfo(Encoding.UTF8.GetString(b)));
+
+                    this.infolist.Add(this.GetInfo(Encoding.UTF8.GetString(b), false));
                     fileStream.Flush();
                     fileStream.Dispose();
                     fileStream.Close();
@@ -63,7 +64,7 @@ namespace PasswordSec {
                 this.applist.Items.Add((object)encryptInfo.getAppName());
         }
 
-        public EncryptInfo GetInfo(string json) {
+        public EncryptInfo GetInfo(string json, bool encrypt) {
             try
             {
                 RootObject obj = JsonConvert.DeserializeObject<RootObject>(json);
@@ -73,12 +74,15 @@ namespace PasswordSec {
                 string email = obj.email;
                 string appname = obj.appname;
                 foreach (ExtraInfo extraInfo2 in (obj.extraInfo))
+                {
                     extraInfo1.Add(extraInfo2.infokey, extraInfo2.infovalue);
-                return new EncryptInfo(appname, username, password, email, extraInfo1);
+
+                }
+                return new EncryptInfo(appname, username, password, email, extraInfo1, encrypt);
             }
             catch (JsonException e)
             {
-                return new EncryptInfo("无法反序列化Json 原因\n" + e.StackTrace, null, null, null, null);
+                return new EncryptInfo("无法反序列化Json 原因\n" + e.StackTrace, null, null, null, null, false);
             }
         }
 
@@ -97,8 +101,16 @@ namespace PasswordSec {
                     pas.Text = info.getPassword();
                     eml.Text = info.getEmail();
                     
+                    sublist.Items.Clear();
+                    foreach (var k in info.getExraInfo().Keys)
+                    {
+                        sublist.Items.Add(k);
+                    }
                 }
             }
+
+            eik.Text = "";
+            eiv.Text = "";
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
@@ -107,6 +119,32 @@ namespace PasswordSec {
 
         private void Button_Click_2(object sender, RoutedEventArgs e) {
             Clipboard.SetDataObject(pas.Text);
+        }
+
+        private void sublist_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (sublist.Items.Count == 0) { return; }
+            if (sublist.SelectedItem == null) { return; }
+
+            foreach (var info in infolist)
+            {
+                if (info.getAppName().Equals(applist.SelectedItem))
+                {
+                    eik.Text = sublist.SelectedItem as string;
+                    eiv.Text = info.getExi(sublist.SelectedItem as string);
+                }
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e) {
+            //TODO 实在是想不出来怎么写了，先这样
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e) {
+            Loaduap();
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e) {
+
         }
     }
 
@@ -177,19 +215,16 @@ namespace PasswordSec {
         private string username;
         private string password;
         private string email;
+        private bool encrypt;
         private Dictionary<string, string> extraInfo;
 
-        public EncryptInfo(
-            string appname,
-            string username,
-            string password,
-            string email,
-            Dictionary<string, string> extraInfo) {
+        public EncryptInfo(string appname, string username, string password, string email, Dictionary<string, string> extraInfo, bool encrypt) {
             this.password = password;
             this.username = username;
             this.email = email;
             this.extraInfo = extraInfo;
             this.appname = appname;
+            this.encrypt = encrypt;
         }
 
         public string getAppName() {
