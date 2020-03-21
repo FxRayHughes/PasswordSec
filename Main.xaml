@@ -10,7 +10,7 @@
         <GroupBox Header="详细信息" HorizontalAlignment="Left" Height="247" Margin="140,10,0,0" VerticalAlignment="Top" Width="473">
             <Grid HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="463" Margin="0,0,-2,-12"/>
         </GroupBox>
-        <Button Content="测试按钮" HorizontalAlignment="Left" Margin="140,274,0,0" VerticalAlignment="Top" Width="473"/>
+        <Button Content="测试按钮" HorizontalAlignment="Left" Margin="140,274,0,0" VerticalAlignment="Top" Width="473" Click="Button_Click"/>
 
     </Grid>
 </Window>

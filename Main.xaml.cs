@@ -20,5 +20,9 @@ namespace PasswordSec {
         public Main() {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }
