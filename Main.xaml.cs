@@ -143,8 +143,9 @@ namespace PasswordSec {
             Loaduap();
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e) {
-
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            new NewProfile().Show();
         }
     }
 
