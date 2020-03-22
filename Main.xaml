@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordSec"
-        mc:Ignorable="d" Height="333" Width="644" Title="欢迎 Lama3L9R">
+        mc:Ignorable="d" Height="329" Width="644" Title="欢迎 Lama3L9R">
     <Grid>
         <ListBox x:Name="applist" HorizontalAlignment="Left" Height="272" Margin="10,10,0,0" VerticalAlignment="Top" Width="116" SelectionChanged="applist_SelectionChanged"/>
-        <GroupBox Header="详细信息" HorizontalAlignment="Left" Height="239" Margin="140,10,0,0" VerticalAlignment="Top" Width="473">
-            <Grid HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="463" Margin="3,-1,-5,0">
+        <GroupBox Header="详细信息" HorizontalAlignment="Left" Height="240" Margin="140,10,0,0" VerticalAlignment="Top" Width="473">
+            <Grid HorizontalAlignment="Left" Height="238" VerticalAlignment="Top" Width="463" Margin="3,-1,-5,-12">
                 <Label Content="用户名" HorizontalAlignment="Left" Margin="148,33,0,0" VerticalAlignment="Top" Width="52"/>
                 <Label Content="   密码" HorizontalAlignment="Left" Margin="148,64,0,0" VerticalAlignment="Top" Width="52"/>
                 <Label Content="   邮箱" HorizontalAlignment="Left" Margin="148,95,0,0" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.538,1.231"/>
@@ -20,15 +20,16 @@
                 <TextBox x:Name="eml" HorizontalAlignment="Left" Height="23" Margin="221,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
                 <TextBox x:Name="eik" HorizontalAlignment="Left" Height="23" Margin="221,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
                 <TextBox x:Name="eiv" HorizontalAlignment="Left" Height="23" Margin="221,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
-                <Button Content="启用编辑" HorizontalAlignment="Left" Margin="148,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
-                <Button Content="复制账号" HorizontalAlignment="Left" Margin="245,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-                <Button Content="复制密码" HorizontalAlignment="Left" Margin="340,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
+                <Button Content="启用编辑" HorizontalAlignment="Left" Margin="186,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
+                <Button Content="复制账号" HorizontalAlignment="Left" Margin="283,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+                <Button Content="复制密码" HorizontalAlignment="Left" Margin="378,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
+                <CheckBox x:Name="enc" Content="加密" HorizontalAlignment="Left" Margin="127,197,0,0" VerticalAlignment="Top" IsEnabled="False"/>
             </Grid>
         </GroupBox>
-        <Button Content="锁定" Margin="170,260,377,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Button Content="保存" Margin="281,260,266,0" VerticalAlignment="Top"/>
-        <Button Content="刷新" Margin="397,260,150,0" VerticalAlignment="Top" Click="Button_Click_4"/>
-        <Button Content="添加" Margin="506,260,41,0" VerticalAlignment="Top" Click="Button_Click_5"/>
+        <Button Content="锁定" Margin="166,260,381,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="保存当前Ei" Margin="277,260,270,0" VerticalAlignment="Top"/>
+        <Button Content="保存和刷新" Margin="393,260,154,0" VerticalAlignment="Top" Click="Button_Click_4"/>
+        <Button Content="添加" Margin="502,260,45,0" VerticalAlignment="Top" Click="Button_Click_5"/>
 
     </Grid>
 </Window>

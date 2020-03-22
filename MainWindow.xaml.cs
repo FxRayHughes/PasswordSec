@@ -2,22 +2,35 @@
 
 namespace PasswordSec {
     //TO-DO ARRAY {
-    //   TODO Full App
-    //   TODO Socket
-    //   TODO Protect
+    //   TODO Basic   App   √
+    //   TODO Adviced App   ×
+    //   TODO SUPER   App   ×
+    //   TODO Socket        ×
+    //   TODO Protect       √
     //}
-    
+
     public partial class MainWindow : Window {
 
 
         public MainWindow() {
             InitializeComponent();
+            if (checkUpdate())
+            {
+
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
-            new Main("").Show();
-            this.Close();
-            //Dev使用，功能写好后请使用网验 谢谢a
+            if (!pwd.Password.Equals("\u0043\u0072\u0061\u0063\u006b\u004d\u0065\u0049\u0064\u0069\u006f\u0074"))
+            {
+                new Main("").Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("错了哟！");
+            }
+
         }
 
         public bool checkUpdate()

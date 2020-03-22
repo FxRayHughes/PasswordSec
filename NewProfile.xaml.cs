@@ -83,13 +83,16 @@ namespace PasswordSec {
             obj.email = eml.Text;
             obj.username = usr.Text;
             obj.password = pas.Text;
+            List<ExtraInfo> list = new List<ExtraInfo>();
             foreach (var entry in ei)
             {
                 ExtraInfo info = new ExtraInfo();
                 info.infokey = entry.Key;
                 info.infovalue = entry.Value;
-                obj.extraInfo.Add(info);
+                list.Add(info);
             }
+
+            obj.extraInfo = list;
 
             try
             {
