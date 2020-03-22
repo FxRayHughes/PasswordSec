@@ -8,11 +8,8 @@
         Title="Password Sec" Height="86" Width="474" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="183*"/>
-            <ColumnDefinition Width="82*"/>
-            <ColumnDefinition Width="203*"/>
         </Grid.ColumnDefinitions>
         <PasswordBox x:Name="pwd" HorizontalAlignment="Left" Margin="23,10,0,0" VerticalAlignment="Top" Width="316" Height="28" Grid.ColumnSpan="3"/>
-        <Button Content="Unlock" HorizontalAlignment="Left" Margin="100,12,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.627,0.682" Grid.Column="2" Click="Button_Click"/>
+        <Button Content="Unlock" HorizontalAlignment="Left" Margin="361,10,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.627,0.682" Click="Button_Click"/>
     </Grid>
 </Window>

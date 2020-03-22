@@ -53,7 +53,7 @@ namespace PasswordSec {
                     byte[] b = new byte[fileStream.Length];
                     while (fileStream.Read(b, 0, (int) fileStream.Length) != 0);
 
-                    EncryptInfo info = this.GetInfo(Encoding.UTF8.GetString(b), false, fileInfo.Name);
+                    EncryptInfo info = this.GetInfo(Encoding.UTF8.GetString(b), false, fileInfo.FullName);
                     if (info.getAppName().Contains("无法反序列化Json"))
                     {
                         MessageBox.Show(info.getAppName(), "无法反序列化Json");
@@ -149,21 +149,27 @@ namespace PasswordSec {
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             UpdateEdit(!editflag);
-            if (editflag)
-            {
-                EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+            updateInfo();
+        }
 
-                if (usr.Text != string.Empty && pas.Text != string.Empty && eml.Text != string.Empty) {
-                    info.setEmail(eml.Text);
-                    info.setPassword(pas.Text);
-                    info.setUsername(usr.Text);
-                    info.setEdited();
-                    info.setEncrypt((bool)enc.IsChecked);
-                    infolist[getIndexFromList(info)] = info;
-                } else {
-                    MessageBox.Show("无法关闭编辑！检测到空项", "关闭编辑失败");
-                    UpdateEdit(true);
-                }
+        public void updateInfo()
+        {
+            if (applist.SelectedItem == null)
+            {
+                return;
+            }
+            EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+
+            if (usr.Text != string.Empty && pas.Text != string.Empty && eml.Text != string.Empty) {
+                info.setEmail(eml.Text);
+                info.setPassword(pas.Text);
+                info.setUsername(usr.Text);
+                info.setEdited();
+                info.setEncrypt((bool)enc.IsChecked);
+                infolist[getIndexFromList(info)] = info;
+            } else {
+                MessageBox.Show("无法关闭编辑！检测到空项", "关闭编辑失败");
+                UpdateEdit(true);
             }
         }
 
@@ -180,6 +186,7 @@ namespace PasswordSec {
                 eml.IsEnabled = false;
                 enc.IsEnabled = false;
                 editflag = false;
+                editbtn.Content = "启用编辑";
                 return;
             }
 
@@ -192,6 +199,7 @@ namespace PasswordSec {
                 pas.IsEnabled = true;
                 eml.IsEnabled = true;
                 enc.IsEnabled = true;
+                editbtn.Content = "禁用编辑";
             }
             else
             {
@@ -201,6 +209,7 @@ namespace PasswordSec {
                 pas.IsEnabled = false;
                 eml.IsEnabled = false;
                 enc.IsEnabled = false;
+                editbtn.Content = "启用编辑";
             }
 
             if (sublist.SelectedItem == null) {
@@ -246,9 +255,21 @@ namespace PasswordSec {
             UpdateEdit(false);
             foreach (var info in infolist)
             {
-                if(info.isEdited()) 
+                if(info.isEdited())
                 {
-                    FileStream fs = new FileStream(info.getPath(), FileMode.Create, FileAccess.Write);
+                    //TODO 已知bug Replace无效
+                    string path = info.getPath();
+                    if (info.getPath().Contains(".encrypteduap") && !info.isEncrypt())
+                    {
+                        path.Replace(".encrypteduap", ".uap");
+                    }
+                    else if(info.getPath().Contains(".uap") && info.isEncrypt())
+                    {
+                        path.Replace(".uap", ".encrypteduap");
+                    }
+
+
+                    FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
                     byte[] writeBytes;
                     RootObject obj = new RootObject();
                     obj.email = info.getEmail();
@@ -294,9 +315,68 @@ namespace PasswordSec {
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            new NewProfile().Show();
+            if (editflag)
+            {
+                MessageBox.Show("爬");
+                return;
+                UpdateEdit(editflag);
+                EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+                if (!info.getExraInfo().ContainsKey(eik.Text))
+                {
+                    info.getExraInfo().Add(eik.Text, eiv.Text);
+                    sublist.Items.Add(eik.Text);
+                }
+                else
+                {
+                    string key = getKeyByIndex(sublist.SelectedIndex, info);
+                    info.getExraInfo().Remove(key);
+                }
+            }
+            else
+            {
+                new NewProfile().Show();
+            }
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e) {
+            UpdateEdit(editflag);
+            if(editflag)
+            {
+                MessageBox.Show("你改个锤子key呢？取消加密自己改 CNMD");
+                return;
+                if (sublist.SelectedItem != null)
+                {
+                    EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+                    if (info.getExraInfo().ContainsKey(eik.Text))
+                    {
+                        info.getExraInfo()[eik.Text] = eiv.Text;
+                    }
+                    else
+                    {
+                        string key = getKeyByIndex(sublist.SelectedIndex, info);
+                        info.getExraInfo().Remove(key);
+                    }
+                }
+            }
+        }
+
+        public string getKeyByIndex(int i, EncryptInfo info)
+        {
+            int count = 0;
+            foreach (var kvp in info.getExraInfo())
+            {
+                if (count == i)
+                {
+                    return kvp.Key;
+                }
+
+                count++;
+            }
+            throw new NullReferenceException("我真的佛了");
         }
     }
+
+    
 
     public class AesUtil
     {
