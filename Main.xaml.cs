@@ -257,7 +257,7 @@ namespace PasswordSec {
             {
                 if(info.isEdited())
                 {
-                    //TODO 已知bug Replace无效
+                    //TODO 已知bug Replace无效 
                     string path = info.getPath();
                     if (info.getPath().Contains(".encrypteduap") && !info.isEncrypt())
                     {
