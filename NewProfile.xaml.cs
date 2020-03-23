@@ -27,33 +27,6 @@ namespace PasswordSec {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            if (ei.ContainsKey(eik.Text))
-            {
-                MessageBox.Show("你在想啥啊？里面都有了啊", "添加失败");
-                return;
-            }
-            ei.Add(eik.Text, eiv.Text);
-            eilist.Items.Add(eik.Text);
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (eilist.SelectedItem == null)
-            {
-                MessageBox.Show("你在干嘛呀！选择一个啊！", "删除失败");
-                return;
-            }
-
-            if (!ei.Remove(eilist.SelectedItem as string))
-            {
-                MessageBox.Show("未知原因", "删除失败");
-                return;
-            }
-
-            eilist.Items.Remove(eilist.SelectedItem);
-            
-        }
 
         private void eilist_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (eilist.SelectedItem != null)
@@ -71,9 +44,22 @@ namespace PasswordSec {
             }
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e) {
-            if (apn.Text.Length == 0)
-            {
+        public static string GetTimeStamp() {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
+
+        private void AddExtraInfo(object sender, RoutedEventArgs e) {
+            if (ei.ContainsKey(eik.Text)) {
+                MessageBox.Show("你在想啥啊？里面都有了啊", "添加失败");
+                return;
+            }
+            ei.Add(eik.Text, eiv.Text);
+            eilist.Items.Add(eik.Text);
+        }
+
+        private void Save(object sender, RoutedEventArgs e) {
+            if (apn.Text.Length == 0) {
                 MessageBox.Show("你是不是有什么东西没有填写鸭！", "保存失败");
                 return;
             }
@@ -84,8 +70,7 @@ namespace PasswordSec {
             obj.username = usr.Text;
             obj.password = pas.Text;
             List<ExtraInfo> list = new List<ExtraInfo>();
-            foreach (var entry in ei)
-            {
+            foreach (var entry in ei) {
                 ExtraInfo info = new ExtraInfo();
                 info.infokey = entry.Key;
                 info.infovalue = entry.Value;
@@ -94,11 +79,10 @@ namespace PasswordSec {
 
             obj.extraInfo = list;
 
-            try
-            {
+            try {
                 string json = JsonConvert.SerializeObject(obj);
-                FileStream fs = new FileStream(Main.instance.baseDirectory.FullName + @"\" + GetTimeStamp() + ((bool) enc.IsChecked ? ".encrypteduap" : ".uap"), FileMode.CreateNew, FileAccess.Write);
-                byte[] bytes = Encoding.UTF8.GetBytes((bool) enc.IsChecked ? AesUtil.AesEncrypt(json, Main.instance.ENCRYPT_KEY) : json);
+                FileStream fs = new FileStream(Main.instance.baseDirectory.FullName + @"\" + GetTimeStamp() + ((bool)enc.IsChecked ? ".encrypteduap" : ".uap"), FileMode.CreateNew, FileAccess.Write);
+                byte[] bytes = Encoding.UTF8.GetBytes((bool)enc.IsChecked ? AesUtil.AesEncrypt(json, Main.instance.ENCRYPT_KEY) : json);
                 fs.Write(bytes, 0, bytes.Length);
                 fs.Flush();
                 fs.Dispose();
@@ -106,16 +90,23 @@ namespace PasswordSec {
                 MessageBox.Show("哇哦，成功了呢", "保存成功");
                 Main.instance.Loaduap();
                 this.Close();
-            }
-            catch (IOException exc)
-            {
+            } catch (IOException exc) {
                 MessageBox.Show("无法报错 未知原因\n" + exc.StackTrace, "保存失败");
             }
         }
 
-        public static string GetTimeStamp() {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalSeconds).ToString();
+        private void DeleateExtraInfo(object sender, RoutedEventArgs e) {
+            if (eilist.SelectedItem == null) {
+                MessageBox.Show("你在干嘛呀！选择一个啊！", "删除失败");
+                return;
+            }
+
+            if (!ei.Remove(eilist.SelectedItem as string)) {
+                MessageBox.Show("未知原因", "删除失败");
+                return;
+            }
+
+            eilist.Items.Remove(eilist.SelectedItem);
         }
     }
 }

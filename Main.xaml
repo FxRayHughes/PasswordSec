@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordSec"
-        mc:Ignorable="d" Height="329" Width="644" Title="欢迎 Lama3L9R">
-    <Grid>
-        <ListBox x:Name="applist" HorizontalAlignment="Left" Height="272" Margin="10,10,0,0" VerticalAlignment="Top" Width="116" SelectionChanged="applist_SelectionChanged"/>
+        mc:Ignorable="d" Height="304" Width="740.333" Title="欢迎 Lama3L9R" ResizeMode="NoResize">
+    <Grid HorizontalAlignment="Left" Width="730">
+        <ListBox x:Name="applist" HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="116" SelectionChanged="applist_SelectionChanged"/>
         <GroupBox Header="详细信息" HorizontalAlignment="Left" Height="240" Margin="140,10,0,0" VerticalAlignment="Top" Width="473">
             <Grid HorizontalAlignment="Left" Height="238" VerticalAlignment="Top" Width="463" Margin="3,-1,-5,-12">
                 <Label Content="用户名" HorizontalAlignment="Left" Margin="148,33,0,0" VerticalAlignment="Top" Width="52"/>
@@ -20,16 +20,20 @@
                 <TextBox x:Name="eml" HorizontalAlignment="Left" Height="23" Margin="221,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
                 <TextBox x:Name="eik" HorizontalAlignment="Left" Height="23" Margin="221,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
                 <TextBox x:Name="eiv" HorizontalAlignment="Left" Height="23" Margin="221,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223" IsEnabled="False"/>
-                <Button x:Name="editbtn" Content="启用编辑" HorizontalAlignment="Left" Margin="186,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
-                <Button Content="复制账号" HorizontalAlignment="Left" Margin="283,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-                <Button Content="复制密码" HorizontalAlignment="Left" Margin="378,194,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
+                <Button x:Name="editbtn" Content="启用编辑" HorizontalAlignment="Left" Margin="186,194,0,0" VerticalAlignment="Top" Width="75" Click="Edit"/>
+                <Button Content="复制账号" Margin="283,194,105,0" VerticalAlignment="Top" Click="CopyUsername"/>
+                <Button Content="复制密码" HorizontalAlignment="Left" Margin="378,194,0,0" VerticalAlignment="Top" Width="75" Click="CopyPassword"/>
                 <CheckBox x:Name="enc" Content="加密" HorizontalAlignment="Left" Margin="127,197,0,0" VerticalAlignment="Top" IsEnabled="False"/>
             </Grid>
         </GroupBox>
-        <Button Content="锁定" Margin="166,260,381,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Button Content="保存当前Ei" Margin="277,260,270,0" VerticalAlignment="Top" Click="Button_Click_6"/>
-        <Button Content="保存和刷新" Margin="393,260,154,0" VerticalAlignment="Top" Click="Button_Click_4"/>
-        <Button Content="添加" Margin="502,260,45,0" VerticalAlignment="Top" Click="Button_Click_5"/>
+        <Button Content="锁定" Margin="618,81,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Lock" Width="92"/>
+        <Button Content="保存和刷新" Margin="618,54,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="SaveAndReload" Width="92"/>
+        <Button Content="添加" Margin="618,27,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="AddProfile" Width="92"/>
+        <Button Content="保存账密" HorizontalAlignment="Left" Margin="618,108,0,0" VerticalAlignment="Top" Width="92" Click="Save"/>
+        <Button Content="保存附加信息" HorizontalAlignment="Left" Margin="618,135,0,0" VerticalAlignment="Top" Width="92" Click="SaveExtraInfo"/>
+        <Button Content="删除附加信息" HorizontalAlignment="Left" Margin="618,162,0,0" VerticalAlignment="Top" Width="92" Click="DeleateExtraInfo"/>
+        <Button Content="新增附加信息" HorizontalAlignment="Left" Margin="618,189,0,0" VerticalAlignment="Top" Width="92" Click="AddExtraInfo"/>
+        <Button Content="删除" HorizontalAlignment="Left" Margin="618,216,0,0" VerticalAlignment="Top" Width="92" Click="Deleate"/>
 
     </Grid>
 </Window>

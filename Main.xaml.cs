@@ -30,7 +30,7 @@ namespace PasswordSec {
             this.infolist.Clear();
             if (!this.baseDirectory.Exists)
                 this.baseDirectory.Create();
-            foreach (FileInfo fileInfo in new List<FileInfo>((IEnumerable<FileInfo>)this.baseDirectory.GetFiles())) {
+            foreach (FileInfo fileInfo in this.baseDirectory.GetFiles()) {
                 if (fileInfo.Extension.Equals(".encrypteduap")) {
                     FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     byte[] b = new byte[fileStream.Length];
@@ -66,8 +66,7 @@ namespace PasswordSec {
                     fileStream.Close();
                 }
             }
-            foreach (EncryptInfo encryptInfo in this.infolist)
-                this.applist.Items.Add((object)encryptInfo.getAppName());
+            foreach (EncryptInfo encryptInfo in this.infolist) this.applist.Items.Add(encryptInfo.getAppName());
         }
 
         public EncryptInfo GetInfo(string json, bool encrypt, string filename) {
@@ -93,12 +92,6 @@ namespace PasswordSec {
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            new MainWindow().Show();
-            this.Close();
-        }
-
         private void applist_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             foreach (var info in infolist)
             {
@@ -122,14 +115,6 @@ namespace PasswordSec {
             eiv.Text = "";
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            Clipboard.SetDataObject(usr.Text);
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e) {
-            Clipboard.SetDataObject(pas.Text);
-        }
-
         private void sublist_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (sublist.Items.Count == 0) { return; }
             if (sublist.SelectedItem == null) { return; }
@@ -146,11 +131,6 @@ namespace PasswordSec {
             UpdateEdit(false);
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            UpdateEdit(!editflag);
-            updateInfo();
-        }
 
         public void updateInfo()
         {
@@ -244,12 +224,6 @@ namespace PasswordSec {
              throw new ArgumentException("真你妈玄学草");
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e) 
-        {
-            saveAll();
-            Loaduap();
-        }
-
         public void saveAll() 
         {
             UpdateEdit(false);
@@ -258,6 +232,7 @@ namespace PasswordSec {
                 if(info.isEdited())
                 {
                     //TODO 已知bug Replace无效 
+                    //可行解决方案，删除文件重新放置
                     string path = info.getPath();
                     if (info.getPath().Contains(".encrypteduap") && !info.isEncrypt())
                     {
@@ -313,53 +288,6 @@ namespace PasswordSec {
             }
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
-        {
-            if (editflag)
-            {
-                MessageBox.Show("爬");
-                return;
-                UpdateEdit(editflag);
-                EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
-                if (!info.getExraInfo().ContainsKey(eik.Text))
-                {
-                    info.getExraInfo().Add(eik.Text, eiv.Text);
-                    sublist.Items.Add(eik.Text);
-                }
-                else
-                {
-                    string key = getKeyByIndex(sublist.SelectedIndex, info);
-                    info.getExraInfo().Remove(key);
-                }
-            }
-            else
-            {
-                new NewProfile().Show();
-            }
-        }
-
-        private void Button_Click_6(object sender, RoutedEventArgs e) {
-            UpdateEdit(editflag);
-            if(editflag)
-            {
-                MessageBox.Show("你改个锤子key呢？取消加密自己改 CNMD");
-                return;
-                if (sublist.SelectedItem != null)
-                {
-                    EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
-                    if (info.getExraInfo().ContainsKey(eik.Text))
-                    {
-                        info.getExraInfo()[eik.Text] = eiv.Text;
-                    }
-                    else
-                    {
-                        string key = getKeyByIndex(sublist.SelectedIndex, info);
-                        info.getExraInfo().Remove(key);
-                    }
-                }
-            }
-        }
-
         public string getKeyByIndex(int i, EncryptInfo info)
         {
             int count = 0;
@@ -374,10 +302,55 @@ namespace PasswordSec {
             }
             throw new NullReferenceException("我真的佛了");
         }
+
+        private void AddProfile(object sender, RoutedEventArgs e) {
+            new NewProfile().Show();
+        }
+
+        private void DeleateExtraInfo(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void SaveExtraInfo(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void Save(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void Lock(object sender, RoutedEventArgs e) {
+            new MainWindow().Show();
+            this.Close();
+        }
+
+        private void SaveAndReload(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void AddExtraInfo(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void Deleate(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void Edit(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void CopyPassword(object sender, RoutedEventArgs e) {
+            Clipboard.SetDataObject(pas.Text);
+        }
+
+        private void CopyUsername(object sender, RoutedEventArgs e) {
+            Clipboard.SetDataObject(usr.Text);
+        }
     }
 
-    
 
+    //Utils
     public class AesUtil
     {
         public static string AesDecrypt(string str, string key) {

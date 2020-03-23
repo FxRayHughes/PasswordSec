@@ -17,9 +17,9 @@
         <TextBox x:Name="eml" HorizontalAlignment="Left" Height="23" Margin="218,111,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="eiv" HorizontalAlignment="Left" Height="23" Margin="218,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="eik" HorizontalAlignment="Left" Height="23" Margin="218,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button Content="保存" HorizontalAlignment="Left" Margin="17,247,0,0" VerticalAlignment="Top" Width="99" Height="32" Click="Button_Click_2"/>
-        <Button Content="添加附加信息" HorizontalAlignment="Left" Margin="129,247,0,0" VerticalAlignment="Top" Width="99" Height="32" Click="Button_Click"/>
-        <Button Content="删除附加信息" HorizontalAlignment="Left" Margin="239,247,0,0" VerticalAlignment="Top" Width="99" Height="32" Click="Button_Click_1" RenderTransformOrigin="0.586,2.094"/>
+        <Button Content="保存" HorizontalAlignment="Left" Margin="17,247,0,0" VerticalAlignment="Top" Width="99" Height="32" Click="AddExtraInfo"/>
+        <Button Content="添加附加信息" HorizontalAlignment="Left" Margin="129,247,0,0" VerticalAlignment="Top" Width="99" Height="32" Click="Save"/>
+        <Button Content="删除附加信息" HorizontalAlignment="Left" Margin="239,247,0,0" VerticalAlignment="Top" Width="99" Height="32" Click="DeleateExtraInfo" RenderTransformOrigin="0.586,2.094"/>
         <Label Content="当前 V" HorizontalAlignment="Left" Margin="143,203,0,0" VerticalAlignment="Top" Width="48"/>
         <Label x:Name="crv" Content="" HorizontalAlignment="Left" Margin="218,203,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Content="应用名称" HorizontalAlignment="Left" Margin="129,22,0,0" VerticalAlignment="Top" Width="62"/>
