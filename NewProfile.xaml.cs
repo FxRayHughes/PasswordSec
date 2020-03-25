@@ -27,7 +27,6 @@ namespace PasswordSec {
             InitializeComponent();
         }
 
-
         private void eilist_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (eilist.SelectedItem != null)
             {
@@ -59,7 +58,7 @@ namespace PasswordSec {
         }
 
         private void Save(object sender, RoutedEventArgs e) {
-            if (apn.Text.Length == 0) {
+            if (apn.Text.Length == 0 || pas.Text.Length == 0 || usr.Text.Length == 0 || eml.Text.Length == 0) {
                 MessageBox.Show("你是不是有什么东西没有填写鸭！", "保存失败");
                 return;
             }

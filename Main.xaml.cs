@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 
+//咕咕咕咕咕咕咕
 namespace PasswordSec {
     public partial class Main : Window {
         public string ENCRYPT_KEY = "sbdrfqr2wqerf2eqy80rtehfuqdbfgeh";
@@ -315,8 +316,11 @@ namespace PasswordSec {
 
         }
 
-        private void Save(object sender, RoutedEventArgs e) {
-
+        private void Save(object sender, RoutedEventArgs e)
+        {
+            if (applist.SelectedItem == null) { return; }
+            EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+            
         }
 
         private void Lock(object sender, RoutedEventArgs e) {
@@ -324,8 +328,36 @@ namespace PasswordSec {
             this.Close();
         }
 
+        //Done
         private void SaveAndReload(object sender, RoutedEventArgs e) {
+            foreach (var info in infolist)
+            {
+                if (info.isEdited())
+                {
+                    RootObject obj = new RootObject();
+                    obj.username = info.getUsername();
+                    obj.appname = info.getAppName();
+                    obj.email = info.getEmail();
+                    obj.password = info.getPassword();
+                    List<ExtraInfo> eilist = new List<ExtraInfo>();
 
+                    foreach (var kvp in info.getExraInfo())
+                    {
+                        var ei = new ExtraInfo();
+                        ei.infovalue = kvp.Value;
+                        ei.infokey = kvp.Key;
+                        eilist.Add(ei);
+                    }
+
+                    FileStream fs = new FileStream(info.getPath(), FileMode.Create, FileAccess.Write, FileShare.Write);
+                    byte[] bytes = info.isEncrypt() ? Encoding.UTF8.GetBytes(AesUtil.AesEncrypt(JsonConvert.SerializeObject(obj), ENCRYPT_KEY)) : Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj));
+
+                    fs.Write(bytes, 0, bytes.Length);
+                    fs.Flush();
+                    fs.Dispose();
+                    fs.Close();
+                }
+            }
         }
 
         private void AddExtraInfo(object sender, RoutedEventArgs e) {
