@@ -8,7 +8,7 @@
     <Grid HorizontalAlignment="Left" Width="730">
         <ListBox x:Name="applist" HorizontalAlignment="Left" Height="240" Margin="10,10,0,0" VerticalAlignment="Top" Width="116" SelectionChanged="applist_SelectionChanged"/>
         <GroupBox Header="详细信息" HorizontalAlignment="Left" Height="240" Margin="140,10,0,0" VerticalAlignment="Top" Width="473">
-            <Grid HorizontalAlignment="Left" Height="238" VerticalAlignment="Top" Width="463" Margin="3,-1,-5,-12">
+            <Grid HorizontalAlignment="Left" Height="231" VerticalAlignment="Top" Width="463" Margin="3,-1,-5,-12">
                 <Label Content="用户名" HorizontalAlignment="Left" Margin="148,33,0,0" VerticalAlignment="Top" Width="52"/>
                 <Label Content="   密码" HorizontalAlignment="Left" Margin="148,64,0,0" VerticalAlignment="Top" Width="52"/>
                 <Label Content="   邮箱" HorizontalAlignment="Left" Margin="148,95,0,0" VerticalAlignment="Top" Width="52" RenderTransformOrigin="0.538,1.231"/>

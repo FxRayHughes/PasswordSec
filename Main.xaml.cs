@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 
-//咕咕咕咕咕咕咕
 namespace PasswordSec {
     public partial class Main : Window {
         public string ENCRYPT_KEY = "sbdrfqr2wqerf2eqy80rtehfuqdbfgeh";
@@ -66,8 +65,12 @@ namespace PasswordSec {
                     fileStream.Dispose();
                     fileStream.Close();
                 }
+                else
+                {
+                    MessageBox.Show("给爷爪巴");
+                }
             }
-            foreach (EncryptInfo encryptInfo in this.infolist) this.applist.Items.Add(encryptInfo.getAppName());
+            this.infolist.ForEach((info) => applist.Items.Add(info.getAppName()));
         }
 
         public EncryptInfo GetInfo(string json, bool encrypt, string filename) {
@@ -81,10 +84,10 @@ namespace PasswordSec {
                 string appname = obj.appname;
                 if (obj.extraInfo != null && obj.extraInfo.Count != 0)
                 {
-                    foreach (ExtraInfo extraInfo2 in (obj.extraInfo)) {
-                        extraInfo1.Add(extraInfo2.infokey, extraInfo2.infovalue);
-                    }
+                    obj.extraInfo.ForEach((i) => extraInfo1.Add(i.infokey, i.infovalue));
                 }
+
+
                 return new EncryptInfo(appname, username, password, email, extraInfo1, encrypt, filename);
             }
             catch (JsonException e)
@@ -101,6 +104,7 @@ namespace PasswordSec {
                     usr.Text = info.getUsername();
                     pas.Text = info.getPassword();
                     eml.Text = info.getEmail();
+                    MessageBox.Show(info.isEncrypt().ToString());
                     enc.IsChecked = info.isEncrypt();
                     
                     sublist.Items.Clear();
@@ -130,28 +134,6 @@ namespace PasswordSec {
             }
 
             UpdateEdit(false);
-        }
-
-
-        public void updateInfo()
-        {
-            if (applist.SelectedItem == null)
-            {
-                return;
-            }
-            EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
-
-            if (usr.Text != string.Empty && pas.Text != string.Empty && eml.Text != string.Empty) {
-                info.setEmail(eml.Text);
-                info.setPassword(pas.Text);
-                info.setUsername(usr.Text);
-                info.setEdited();
-                info.setEncrypt((bool)enc.IsChecked);
-                infolist[getIndexFromList(info)] = info;
-            } else {
-                MessageBox.Show("无法关闭编辑！检测到空项", "关闭编辑失败");
-                UpdateEdit(true);
-            }
         }
 
         //false = 禁用编辑 true = 启用
@@ -225,70 +207,6 @@ namespace PasswordSec {
              throw new ArgumentException("真你妈玄学草");
         }
 
-        public void saveAll() 
-        {
-            UpdateEdit(false);
-            foreach (var info in infolist)
-            {
-                if(info.isEdited())
-                {
-                    //TODO 已知bug Replace无效 
-                    //可行解决方案，删除文件重新放置
-                    string path = info.getPath();
-                    if (info.getPath().Contains(".encrypteduap") && !info.isEncrypt())
-                    {
-                        path.Replace(".encrypteduap", ".uap");
-                    }
-                    else if(info.getPath().Contains(".uap") && info.isEncrypt())
-                    {
-                        path.Replace(".uap", ".encrypteduap");
-                    }
-
-
-                    FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
-                    byte[] writeBytes;
-                    RootObject obj = new RootObject();
-                    obj.email = info.getEmail();
-                    obj.username = info.getUsername();
-                    obj.appname = info.getAppName();
-                    obj.password = info.getPassword();
-                    List<ExtraInfo> list = new List<ExtraInfo>();
-                    
-                    foreach(var kvp in info.getExraInfo()) {
-                        ExtraInfo ei = new ExtraInfo();
-                        ei.infokey = kvp.Key;
-                        ei.infovalue = kvp.Value;
-                        list.Add(ei);
-                    }
-
-                    obj.extraInfo = list;
-
-
-                    if(info.isEncrypt())
-                    {
-                        writeBytes = Encoding.UTF8.GetBytes(AesUtil.AesEncrypt(JsonConvert.SerializeObject(obj), ENCRYPT_KEY));
-                    }
-                    else
-                    {
-                        writeBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj));
-                    }
-
-                    try
-                    {
-                        fs.Write(writeBytes, 0, writeBytes.Length);
-                        fs.Flush();
-                        fs.Dispose();
-                        fs.Close();
-                        
-                    }
-                    catch (IOException exc)
-                    {
-                        MessageBox.Show("保存文件失败！原因：\n" + exc.StackTrace);
-                    }
-                }
-            }
-        }
-
         public string getKeyByIndex(int i, EncryptInfo info)
         {
             int count = 0;
@@ -319,8 +237,15 @@ namespace PasswordSec {
         private void Save(object sender, RoutedEventArgs e)
         {
             if (applist.SelectedItem == null) { return; }
+            if(pas.Text.Length == 0 || usr.Text.Length == 0 || eml.Text.Length == 0) { return; }
             EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
-            
+            info.setPassword(pas.Text);
+            info.setUsername(usr.Text);
+            info.setEmail(eml.Text);
+            info.setEdited();
+            info.setEncrypt((bool) enc.IsChecked);
+            MessageBox.Show(info.isEncrypt().ToString());
+            infolist[getIndexFromList(info)] = info;
         }
 
         private void Lock(object sender, RoutedEventArgs e) {
@@ -334,6 +259,13 @@ namespace PasswordSec {
             {
                 if (info.isEdited())
                 {
+                    string path = info.getPath();
+                    if (info.getPath().Contains(".encrypteduap") && !info.isEncrypt()) {
+                        path = path.Replace(".encrypteduap", ".uap");
+                    } else if (info.getPath().Contains(".uap") && info.isEncrypt()) {
+                        path = path.Replace(".uap", ".encrypteduap");
+                    }
+
                     RootObject obj = new RootObject();
                     obj.username = info.getUsername();
                     obj.appname = info.getAppName();
@@ -349,7 +281,9 @@ namespace PasswordSec {
                         eilist.Add(ei);
                     }
 
-                    FileStream fs = new FileStream(info.getPath(), FileMode.Create, FileAccess.Write, FileShare.Write);
+                    eilist.ForEach((i) => MessageBox.Show(i.infovalue, i.infokey));
+
+                    FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
                     byte[] bytes = info.isEncrypt() ? Encoding.UTF8.GetBytes(AesUtil.AesEncrypt(JsonConvert.SerializeObject(obj), ENCRYPT_KEY)) : Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj));
 
                     fs.Write(bytes, 0, bytes.Length);
@@ -358,6 +292,7 @@ namespace PasswordSec {
                     fs.Close();
                 }
             }
+            Loaduap();
         }
 
         private void AddExtraInfo(object sender, RoutedEventArgs e) {
@@ -368,8 +303,9 @@ namespace PasswordSec {
 
         }
 
-        private void Edit(object sender, RoutedEventArgs e) {
-
+        private void Edit(object sender, RoutedEventArgs e)
+        {
+            if (editflag) { UpdateEdit(false); } else { UpdateEdit(true); }
         }
 
         private void CopyPassword(object sender, RoutedEventArgs e) {
@@ -414,10 +350,13 @@ namespace PasswordSec {
             return stringBuilder.ToString().ToUpper();
         }
 
-        public static byte[] getByteArrayFromHexString(string hexString) {
+        public static byte[] getByteArrayFromHexString(string hexString)
+        {
             hexString = hexString.Replace(" ", "").Replace("\0", string.Empty);
-            if (hexString.Length % 2 != 0)
-                throw new ArgumentException("参数长度不正确");
+            if (hexString.Length % 2 != 0) { 
+                MessageBox.Show("字符串无效，可能是非加密文件？", "解密失败");
+                throw new NullReferenceException("字符串无效或者为空");
+            }
             byte[] numArray = new byte[hexString.Length / 2];
             for (int index = 0; index < numArray.Length; ++index) {
                 string str = hexString.Substring(index * 2, 2);
@@ -445,7 +384,8 @@ namespace PasswordSec {
         public string infovalue { get; set; }
     }
 
-    public class EncryptInfo {
+    public class EncryptInfo
+    {
         private string appname;
         private string username;
         private string password;
