@@ -8,12 +8,14 @@ using System.Windows.Controls;
 using Newtonsoft.Json;
 
 namespace PasswordSec {
+    //todo 编辑extrainfo的时候感觉有点奇怪，看看换一个方法编辑
     public partial class Main : Window {
         public string ENCRYPT_KEY = "sbdrfqr2wqerf2eqy80rtehfuqdbfgeh";
         public static Main instance;
         public DirectoryInfo baseDirectory = Directory.CreateDirectory("C:\\passsave");
         public List<EncryptInfo> infolist = new List<EncryptInfo>();
         public bool editflag = false;
+        public bool addflag = false;
 
         public Main(string decryptkey)
         {
@@ -30,15 +32,19 @@ namespace PasswordSec {
             this.infolist.Clear();
             if (!this.baseDirectory.Exists)
                 this.baseDirectory.Create();
-            foreach (FileInfo fileInfo in this.baseDirectory.GetFiles()) {
-                if (fileInfo.Extension.Equals(".encrypteduap")) {
-                    FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            foreach (FileInfo fileInfo in this.baseDirectory.GetFiles())
+            {
+                if (fileInfo.Extension.Equals(".encrypteduap"))
+                {
+                    FileStream fileStream =
+                        new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     byte[] b = new byte[fileStream.Length];
-                    while (fileStream.Read(b, 0, (int)fileStream.Length) != 0) ;
+                    while (fileStream.Read(b, 0, (int) fileStream.Length) != 0) ;
                     string json = AesUtil.AesDecrypt(Encoding.UTF8.GetString(b), ENCRYPT_KEY);
 
                     EncryptInfo info = this.GetInfo(json, true, fileInfo.FullName);
-                    if (info.getAppName().Contains("无法反序列化Json")) {
+                    if (info.getAppName().Contains("无法反序列化Json"))
+                    {
                         MessageBox.Show(info.getAppName(), "无法反序列化Json");
                         continue;
                     }
@@ -47,11 +53,14 @@ namespace PasswordSec {
                     fileStream.Flush();
                     fileStream.Dispose();
                     fileStream.Close();
-                    
-                } else if (fileInfo.Extension.Equals(".uap")) {
-                    FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                }
+                else if (fileInfo.Extension.Equals(".uap"))
+                {
+                    FileStream fileStream =
+                        new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     byte[] b = new byte[fileStream.Length];
-                    while (fileStream.Read(b, 0, (int) fileStream.Length) != 0);
+                    while (fileStream.Read(b, 0, (int) fileStream.Length) != 0) ;
 
                     EncryptInfo info = this.GetInfo(Encoding.UTF8.GetString(b), false, fileInfo.FullName);
                     if (info.getAppName().Contains("无法反序列化Json"))
@@ -70,8 +79,9 @@ namespace PasswordSec {
                     MessageBox.Show("给爷爪巴");
                 }
             }
-            this.infolist.ForEach((info) => applist.Items.Add(info.getAppName()));
-        }
+
+            this.infolist.ForEach((info) => { applist.Items.Add(info.getAppName()); });
+    }
 
         public EncryptInfo GetInfo(string json, bool encrypt, string filename) {
             try
@@ -112,6 +122,8 @@ namespace PasswordSec {
                     {
                         sublist.Items.Add(k);
                     }
+
+                    break;
                 }
             }
             UpdateEdit(false);
@@ -143,7 +155,6 @@ namespace PasswordSec {
 
             if (applist.SelectedItem == null) {
                 usr.IsEnabled = false;
-                eik.IsEnabled = false;
                 eiv.IsEnabled = false;
                 pas.IsEnabled = false;
                 eml.IsEnabled = false;
@@ -157,7 +168,6 @@ namespace PasswordSec {
             if (flag)
             {
                 usr.IsEnabled = true;
-                eik.IsEnabled = true;
                 eiv.IsEnabled = true;
                 pas.IsEnabled = true;
                 eml.IsEnabled = true;
@@ -167,7 +177,6 @@ namespace PasswordSec {
             else
             {
                 usr.IsEnabled = false;
-                eik.IsEnabled = false;
                 eiv.IsEnabled = false;
                 pas.IsEnabled = false;
                 eml.IsEnabled = false;
@@ -176,7 +185,6 @@ namespace PasswordSec {
             }
 
             if (sublist.SelectedItem == null) {
-                eik.IsEnabled = false;
                 eiv.IsEnabled = false;
             }
 
@@ -227,11 +235,18 @@ namespace PasswordSec {
         }
 
         private void DeleateExtraInfo(object sender, RoutedEventArgs e) {
-
+            if (applist.SelectedItem == null) { return; }
+            if (sublist.SelectedItem == null) { return; }
+            EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+            info.getExraInfo().Remove(sublist.SelectedItem as string);
         }
 
         private void SaveExtraInfo(object sender, RoutedEventArgs e) {
+            if (applist.SelectedItem == null) { return; }
+            if (sublist.SelectedItem == null) { return; }
 
+            EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+            info.getExraInfo()[sublist.SelectedItem as string] = eiv.Text;
         }
 
         private void Save(object sender, RoutedEventArgs e)
@@ -244,7 +259,6 @@ namespace PasswordSec {
             info.setEmail(eml.Text);
             info.setEdited();
             info.setEncrypt((bool) enc.IsChecked);
-            MessageBox.Show(info.isEncrypt().ToString());
             infolist[getIndexFromList(info)] = info;
         }
 
@@ -253,16 +267,18 @@ namespace PasswordSec {
             this.Close();
         }
 
-        //Done
         private void SaveAndReload(object sender, RoutedEventArgs e) {
             foreach (var info in infolist)
             {
                 if (info.isEdited())
                 {
                     string path = info.getPath();
+                    string delpath = "";
                     if (info.getPath().Contains(".encrypteduap") && !info.isEncrypt()) {
                         path = path.Replace(".encrypteduap", ".uap");
+                        delpath = info.getPath();
                     } else if (info.getPath().Contains(".uap") && info.isEncrypt()) {
+                        delpath = info.getPath();
                         path = path.Replace(".uap", ".encrypteduap");
                     }
 
@@ -273,6 +289,28 @@ namespace PasswordSec {
                     obj.password = info.getPassword();
                     List<ExtraInfo> eilist = new List<ExtraInfo>();
 
+                    bool delflag = false;
+                    if (delpath != String.Empty)
+                    {
+                        foreach (var item in baseDirectory.GetFileSystemInfos())
+                        {
+                            if (item.FullName == delpath)
+                            {
+                                item.Delete();
+                                delflag = true;
+                                break;
+                            }
+                        }
+
+                        if (!delflag)
+                        {
+                            MessageBox.Show("文件删除失败 请反馈给开发者", "保存失败");
+                            MainWindow.instance.disconnectToServer();
+                            return;
+                        }
+                    }
+
+
                     foreach (var kvp in info.getExraInfo())
                     {
                         var ei = new ExtraInfo();
@@ -281,7 +319,7 @@ namespace PasswordSec {
                         eilist.Add(ei);
                     }
 
-                    eilist.ForEach((i) => MessageBox.Show(i.infovalue, i.infokey));
+                    obj.extraInfo = eilist;
 
                     FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
                     byte[] bytes = info.isEncrypt() ? Encoding.UTF8.GetBytes(AesUtil.AesEncrypt(JsonConvert.SerializeObject(obj), ENCRYPT_KEY)) : Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj));
@@ -296,13 +334,83 @@ namespace PasswordSec {
         }
 
         private void AddExtraInfo(object sender, RoutedEventArgs e) {
+            if (applist.SelectedItem == null) { return; }
 
+
+            if (addflag)
+            {
+                if (eik.Text == String.Empty && eiv.Text == string.Empty)
+                {
+                    addflag = false;
+                    eik.IsEnabled = false;
+                    eiv.IsEnabled = false;
+                    addei.Content = "添加附加信息";
+                    return;
+                }
+                addflag = false;
+                eik.IsEnabled = false;
+                eiv.IsEnabled = false;
+                if (eik.Text != string.Empty)
+                {
+                    EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+                    if (info.getExraInfo().ContainsKey(eik.Text))
+                    {
+                        MessageBox.Show("key不能重复哦！", "添加失败");
+                        addflag = true;
+                        eik.IsEnabled = true;
+                        eiv.IsEnabled = true;
+                        return;
+                    }
+                    info.getExraInfo().Add(eik.Text, eiv.Text);
+                    addei.Content = "添加附加信息";
+
+                    sublist.Items.Clear();
+                    foreach (var kvp in info.getExraInfo())
+                    {
+                        sublist.Items.Add(kvp.Key);
+                    }
+                }
+                else
+                {
+                    addflag = true;
+                    eik.IsEnabled = true;
+                    eiv.IsEnabled = true;
+                    MessageBox.Show("输入东西啊喂！");
+                }
+            }
+            else
+            {
+                addflag = true;
+                eik.IsEnabled = true;
+                eiv.IsEnabled = true;
+                addei.Content = "再次点击来确认";
+            }
         }
 
-        private void Deleate(object sender, RoutedEventArgs e) {
+        private void Deleate(object sender, RoutedEventArgs e)
+        {
+            if (applist.SelectedItem == null) { return; }
+            var box = MessageBox.Show("确认删除？", "请务必再三确认！", MessageBoxButton.YesNo);
+            if (box == MessageBoxResult.Yes)
+            {
+                EncryptInfo info = getInfoByAppName(applist.SelectedItem as string);
+                bool delflag = false;
 
+                foreach (var item in baseDirectory.GetFileSystemInfos()) {
+                    if (item.FullName == info.getPath()) {
+                        item.Delete();
+                        delflag = true;
+                        break;
+                    }
+                }
+
+                if (!delflag)
+                {
+                    MessageBox.Show("文件删除失败 请反馈给开发者", "删除失败");
+                }
+            }
         }
-
+        
         private void Edit(object sender, RoutedEventArgs e)
         {
             if (editflag) { UpdateEdit(false); } else { UpdateEdit(true); }

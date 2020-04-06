@@ -27,12 +27,12 @@
             </Grid>
         </GroupBox>
         <Button Content="锁定" Margin="618,81,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Lock" Width="92"/>
-        <Button Content="保存和刷新" Margin="618,54,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="SaveAndReload" Width="92"/>
+        <Button Content=" 保存到文件" Margin="618,54,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="SaveAndReload" Width="92"/>
         <Button Content="添加" Margin="618,27,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="AddProfile" Width="92"/>
-        <Button Content="保存账密" HorizontalAlignment="Left" Margin="618,108,0,0" VerticalAlignment="Top" Width="92" Click="Save"/>
+        <Button Content="保存到内存" HorizontalAlignment="Left" Margin="618,108,0,0" VerticalAlignment="Top" Width="92" Click="Save"/>
         <Button Content="保存附加信息" HorizontalAlignment="Left" Margin="618,135,0,0" VerticalAlignment="Top" Width="92" Click="SaveExtraInfo"/>
         <Button Content="删除附加信息" HorizontalAlignment="Left" Margin="618,162,0,0" VerticalAlignment="Top" Width="92" Click="DeleateExtraInfo"/>
-        <Button Content="新增附加信息" HorizontalAlignment="Left" Margin="618,189,0,0" VerticalAlignment="Top" Width="92" Click="AddExtraInfo"/>
+        <Button x:Name="addei" Content="新增附加信息" HorizontalAlignment="Left" Margin="618,189,0,0" VerticalAlignment="Top" Width="92" Click="AddExtraInfo"/>
         <Button Content="删除" HorizontalAlignment="Left" Margin="618,216,0,0" VerticalAlignment="Top" Width="92" Click="Deleate"/>
 
     </Grid>

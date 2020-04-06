@@ -1,16 +1,11 @@
 ﻿using System.Windows;
 
 namespace PasswordSec {
-    //TO-DO ARRAY {
-    //   TODO Basic   App   √
-    //   TODO Adviced App   ×
-    //   TODO SUPER   App   ×
-    //   TODO Socket        ×
-    //   TODO Protect       √
-    //}
+    //   TODO Server Protection ×
 
-    public partial class MainWindow : Window {
-
+    public partial class MainWindow : Window
+    {
+        public static MainWindow instance;
 
         public MainWindow() {
             InitializeComponent();
@@ -18,6 +13,8 @@ namespace PasswordSec {
             {
 
             }
+
+            instance = this;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
@@ -36,6 +33,11 @@ namespace PasswordSec {
         public bool checkUpdate()
         {
             return true;
+        }
+
+        public void disconnectToServer()
+        {
+
         }
     }
 }
