@@ -74,10 +74,6 @@ namespace PasswordSec {
                     fileStream.Dispose();
                     fileStream.Close();
                 }
-                else
-                {
-                    MessageBox.Show("给爷爪巴");
-                }
             }
 
             this.infolist.ForEach((info) => { applist.Items.Add(info.getAppName()); });
@@ -114,7 +110,6 @@ namespace PasswordSec {
                     usr.Text = info.getUsername();
                     pas.Text = info.getPassword();
                     eml.Text = info.getEmail();
-                    MessageBox.Show(info.isEncrypt().ToString());
                     enc.IsChecked = info.isEncrypt();
                     
                     sublist.Items.Clear();
